@@ -1,1 +1,1 @@
-export const selectAllPosts = (reduxState) => reduxState.posts;
+export const selectAllPosts = () => (reduxState) => reduxState.posts;

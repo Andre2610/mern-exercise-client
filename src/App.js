@@ -14,7 +14,6 @@ export default function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("useEffect called?");
     dispatch(fetchPosts());
   }, [dispatch]);
 
