@@ -5,7 +5,7 @@ const initialState = {};
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case FETCH_ALL:
-      return state;
+      return payload;
     case CREATE_POST:
       return state;
     default:

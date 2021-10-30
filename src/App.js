@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchPosts } from "./store/posts/actions";
 
 import Posts from "./components/Posts/Posts";
 import Form from "./components/Form/Form";
@@ -9,6 +11,12 @@ import { memories } from "./config/constants";
 
 export default function App() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("useEffect called?");
+    dispatch(fetchPosts());
+  }, [dispatch]);
 
   return (
     <Container maxWidth="lg">
@@ -27,7 +35,7 @@ export default function App() {
         <Container>
           <Grid
             container
-            justify="space-between"
+            justifyContent="space-between"
             alignItems="stretch"
             spacing={3}
           >
