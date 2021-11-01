@@ -10,7 +10,6 @@ import useStyles from "./styles";
 export default function Posts() {
   const classes = useStyles();
   const allPosts = useSelector(selectAllPosts());
-  console.log("all posts", allPosts);
   return !allPosts.length ? (
     <CircularProgress />
   ) : (
@@ -21,7 +20,6 @@ export default function Posts() {
       spacing={3}
     >
       {allPosts.map((post) => {
-        console.log("post id", post._id);
         return (
           <Grid key={post._id} item xs={12} sm={6}>
             <Post post={post} />

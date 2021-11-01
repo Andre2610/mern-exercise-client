@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchPosts } from "./store/posts/actions";
 
@@ -12,6 +12,8 @@ import { memories } from "./config/constants";
 export default function App() {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const [currentId, setCurrentId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchPosts());

@@ -1,6 +1,8 @@
 import React from "react";
-
+import { useDispatch } from "react-redux";
 import moment from "moment";
+import { setCurrentId } from "../../../store/posts/actions";
+
 import {
   Card,
   CardActions,
@@ -17,7 +19,7 @@ import useStyles from "./styles";
 
 export default function Post(props) {
   const classes = useStyles();
-
+  const dispatch = useDispatch();
   const { post } = props;
 
   return (
@@ -34,8 +36,12 @@ export default function Post(props) {
         </Typography>
       </div>
       <div className={classes.overlay2}>
-        <Button style={{ color: "white" }} size="small" onClick={() => {}}>
-          <MoreHorizIcon fontSize="default" />
+        <Button
+          style={{ color: "white" }}
+          size="small"
+          onClick={() => dispatch(setCurrentId(post._id))}
+        >
+          <MoreHorizIcon fontSize="medium" />
         </Button>
       </div>
       <div className={classes.details}>
@@ -43,8 +49,11 @@ export default function Post(props) {
           {post.tags.map((tag) => `#${tag} `)}
         </Typography>
       </div>
-      <CardContent className={classes.title} variant="h5" gutterBottom>
-        {post.message}
+      <Typography className={classes.title}>{post.title}</Typography>
+      <CardContent>
+        <Typography variant="h5" style={{ marginBottom: "0.35em" }}>
+          {post.message}
+        </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
         <Button size="small" color="primary" onClick={() => {}}>

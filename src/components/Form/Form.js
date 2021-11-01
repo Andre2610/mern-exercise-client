@@ -1,28 +1,39 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import FileBase from "react-file-base64";
 
 import { Button, Paper, TextField, Typography } from "@material-ui/core";
 import useStyles from "./styles";
-import { createPost } from "../../store/posts/actions";
+import {
+  createPost,
+  updatePost,
+  resetCurrentId,
+} from "../../store/posts/actions";
+import { selectCurrentId, selectPostById } from "../../store/posts/selectors";
+
+const initialState = {
+  creator: "",
+  title: "",
+  message: "",
+  tags: "",
+  selectedFile: "",
+};
 
 export default function Form() {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const initialState = {
-    creator: "",
-    title: "",
-    message: "",
-    tags: "",
-    selectedFile: "",
-  };
-
+  const currentId = useSelector(selectCurrentId());
+  const post = useSelector(selectPostById(currentId));
   const [postData, setPostData] = useState(initialState);
 
   const handleSubmit = () => {
-    console.log("called??");
-    dispatch(createPost(postData));
+    if (currentId) {
+      dispatch(updatePost(currentId, postData));
+    } else {
+      dispatch(createPost(postData));
+    }
+    setPostData(initialState);
   };
 
   const onChangeHandler = (event) => {
@@ -38,11 +49,18 @@ export default function Form() {
 
   const clear = () => {
     setPostData(initialState);
+    dispatch(resetCurrentId());
   };
+
+  useEffect(() => {
+    if (post) setPostData(post);
+  }, [post]);
 
   return (
     <Paper className={classes.paper}>
-      <Typography variant="h6">Creating a memory</Typography>
+      <Typography variant="h6">
+        {currentId ? "Editing" : "Creating"} a memory
+      </Typography>
       <div className={`${classes.root} ${classes.form}`}>
         <TextField
           name="creator"
