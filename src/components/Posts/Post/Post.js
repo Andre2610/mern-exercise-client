@@ -1,7 +1,11 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import moment from "moment";
-import { setCurrentId } from "../../../store/posts/actions";
+import {
+  setCurrentId,
+  deletePost,
+  likePost,
+} from "../../../store/posts/actions";
 
 import {
   Card,
@@ -49,19 +53,32 @@ export default function Post(props) {
           {post.tags.map((tag) => `#${tag} `)}
         </Typography>
       </div>
-      <Typography className={classes.title}>{post.title}</Typography>
+      <Typography
+        className={classes.title}
+        variant="h5"
+        component="h2"
+        style={{ marginBottom: "0.35em" }}
+      >
+        {post.title}
+      </Typography>
       <CardContent>
-        <Typography variant="h5" style={{ marginBottom: "0.35em" }}>
+        <Typography variant="body2" color="textSecondary" component="p">
           {post.message}
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <Button size="small" color="primary" onClick={() => {}}>
-          <ThumbUpAltIcon />
-          Like
-          {post.likeCount}
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => dispatch(likePost(post._id))}
+        >
+          <ThumbUpAltIcon /> &nbsp;Like&nbsp;{post.likeCount}
         </Button>
-        <Button size="small" color="primary" onClick={() => {}}>
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => dispatch(deletePost(post._id))}
+        >
           <DeleteIcon />
           Delete
         </Button>

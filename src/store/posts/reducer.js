@@ -4,6 +4,7 @@ import {
   UPDATE_POST,
   SET_CURRENT_ID,
   RESET_CURRENT_ID,
+  DELETE_POST,
 } from "./actions";
 
 const initialState = {
@@ -27,7 +28,11 @@ export default (state = initialState, { type, payload }) => {
         allPosts: updatedPostArray,
         currentId: null,
       };
-
+    case DELETE_POST:
+      return {
+        ...state,
+        allPosts: state.allPosts.filter((post) => post._id !== payload),
+      };
     case SET_CURRENT_ID:
       return { ...state, currentId: payload };
     case RESET_CURRENT_ID:

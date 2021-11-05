@@ -6,6 +6,7 @@ export const CREATE_POST = "CREATE_POST";
 export const UPDATE_POST = "UPDATE_POST";
 export const SET_CURRENT_ID = "SET_CURRENT_ID";
 export const RESET_CURRENT_ID = "RESET_CURRENT_ID";
+export const DELETE_POST = "DELETE_POST";
 
 const fetchPostsSuccess = (data) => {
   return { type: FETCH_ALL, payload: data };
@@ -17,6 +18,10 @@ const postCreatedSuccess = (data) => {
 
 const updatePostSuccess = (data) => {
   return { type: UPDATE_POST, payload: data };
+};
+
+const deletedPostSuccess = (id) => {
+  return { type: DELETE_POST, payload: id };
 };
 
 export const setCurrentId = (data) => {
@@ -53,6 +58,26 @@ export const updatePost = (id, data) => async (dispatch, getState) => {
 
     dispatch(updatePostSuccess(response.data));
   } catch (error) {
-    console.log("Error", error.message);
+    console.log("Error", error);
+  }
+};
+
+export const deletePost = (id) => async (dispatch, getState) => {
+  try {
+    const response = await axios.delete(`${API_URL}/posts/${id}`);
+
+    dispatch(deletedPostSuccess(id));
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
+
+export const likePost = (id) => async (dispatch, getState) => {
+  try {
+    const response = await axios.patch(`${API_URL}/posts/${id}/like-post`);
+
+    dispatch(updatePostSuccess(response.data));
+  } catch (error) {
+    console.log("Error", error);
   }
 };
