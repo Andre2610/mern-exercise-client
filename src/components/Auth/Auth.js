@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
+import { GOOGLE_ID } from "../../config/constants";
+import { googleAuthSuccess } from "../../store/user/actions";
 
 import Input from "./Input";
 import Icon from "./Icon";
@@ -17,7 +21,8 @@ import useStyles from "./styles";
 
 export default function Auth() {
   const classes = useStyles();
-
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
 
@@ -29,6 +34,24 @@ export default function Auth() {
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const googleSuccess = async (res) => {
+    const result = res?.profileObj;
+    const token = res?.tokenId;
+
+    try {
+      const data = { result, token };
+      dispatch(googleAuthSuccess(data));
+      history.push("/");
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  const googleFailure = (error) => {
+    console.log("Google sing in error:", error);
+    console.log("Google sign in was unsuccessful. Try again.");
   };
 
   const handleSubmit = (event) => {
@@ -82,21 +105,6 @@ export default function Auth() {
               />
             )}
           </Grid>
-          <GoogleLogin
-            clientId="GOGGLE ID"
-            render={(renderProps) => (
-              <Button
-                className={classes.googleButton}
-                color="primary"
-                fullWidth
-                disabled={renderProps.disabled}
-                startIcon={<Icon />}
-                variant="contained"
-              >
-                Google sign in
-              </Button>
-            )}
-          />
           <Button
             className={classes.submit}
             type="submit"
@@ -105,7 +113,26 @@ export default function Auth() {
             color="primary"
           >
             {isSignup ? "Sign up" : "Login"}
-          </Button>
+          </Button>{" "}
+          <GoogleLogin
+            clientId={GOOGLE_ID}
+            render={(renderProps) => (
+              <Button
+                className={classes.googleButton}
+                color="primary"
+                fullWidth
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+                startIcon={<Icon />}
+                variant="contained"
+              >
+                Google sign in
+              </Button>
+            )}
+            onSuccess={googleSuccess}
+            onFailure={googleFailure}
+            cookiePolicy="single_host_origin"
+          />
           <Grid container justifyContent="flex-end">
             <Grid item>
               {isSignup

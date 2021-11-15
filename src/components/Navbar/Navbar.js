@@ -1,5 +1,8 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../store/user/actions";
+import { selectUserAuthData } from "../../store/user/selectors";
+import { NavLink, useHistory } from "react-router-dom";
 
 import { memories } from "../../config/constants";
 import { AppBar, Avatar, Toolbar, Typography, Button } from "@material-ui/core";
@@ -7,8 +10,14 @@ import useStyles from "./styles";
 
 export default function Navbar() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const user = useSelector(selectUserAuthData());
 
-  const user = null;
+  const logoutHandler = () => {
+    dispatch(logout());
+    history.push("/");
+  };
 
   return (
     <AppBar className={classes.appBar} position="static" color="inherit">
@@ -46,6 +55,7 @@ export default function Navbar() {
               variant="contained"
               className={classes.logout}
               color="secondary"
+              onClick={logoutHandler}
             >
               Log out
             </Button>
