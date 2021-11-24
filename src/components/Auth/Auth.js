@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 import { GOOGLE_ID } from "../../config/constants";
-import { googleAuthSuccess } from "../../store/user/actions";
+import { googleAuthSuccess, signUp, login } from "../../store/user/actions";
 
 import Input from "./Input";
 import Icon from "./Icon";
@@ -21,19 +21,23 @@ import useStyles from "./styles";
 
 export default function Auth() {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  const initialState = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
+
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
+  const [formData, setFormData] = useState(initialState);
 
   const switchMode = () => {
     setIsSignup(!isSignup);
-  };
-
-  const handleChange = (event) => {};
-
-  const handleShowPassword = () => {
-    setShowPassword(!showPassword);
   };
 
   const googleSuccess = async (res) => {
@@ -54,9 +58,25 @@ export default function Auth() {
     console.log("Google sign in was unsuccessful. Try again.");
   };
 
+  const handleChange = (event) => {
+    setFormData({ ...formData, [event.target.name]: event.target.value });
+  };
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (isSignup) {
+      dispatch(signUp(formData, history));
+      console.log("Sign up:", formData);
+    } else {
+      // dispatch(login(formData,history))
+      console.log("Login:", formData);
+    }
   };
+
   return (
     <Container component="main" maxWidth="xs">
       <Paper className={classes.paper} elevation={3}>

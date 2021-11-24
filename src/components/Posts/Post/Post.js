@@ -72,7 +72,7 @@ export default function Post(props) {
           color="primary"
           onClick={() => dispatch(likePost(post._id))}
         >
-          <ThumbUpAltIcon /> &nbsp;Like&nbsp;{post.likeCount}
+          <ThumbUpAltIcon /> &nbsp;Like&nbsp;{post.likes.length}
         </Button>
         <Button
           size="small"

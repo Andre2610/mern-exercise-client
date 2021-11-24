@@ -13,7 +13,7 @@ export default (state = initialState, { type, payload }) => {
 
     case LOG_OUT:
       localStorage.clear();
-      return initialState;
+      return { authData: null };
     default:
       return state;
   }

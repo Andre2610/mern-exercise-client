@@ -1,5 +1,4 @@
-import axios from "axios";
-import { API_URL } from "../../config/constants";
+import { API } from "../../config/constants";
 
 export const FETCH_ALL = "FETCH_ALL";
 export const CREATE_POST = "CREATE_POST";
@@ -34,7 +33,7 @@ export const resetCurrentId = () => {
 
 export const fetchPosts = () => async (dispatch, getState) => {
   try {
-    const response = await axios.get(`${API_URL}/posts`);
+    const response = await API.get(`/posts`);
 
     dispatch(fetchPostsSuccess(response.data));
   } catch (error) {
@@ -44,7 +43,14 @@ export const fetchPosts = () => async (dispatch, getState) => {
 
 export const createPost = (data) => async (dispatch, getState) => {
   try {
-    const response = await axios.post(`${API_URL}/posts`, { data });
+    const token = getState().user.authData.token;
+    const response = await API.post(
+      `/posts`,
+      { data },
+      {
+        headers: { authorization: `Bearer ${token}` },
+      }
+    );
 
     dispatch(postCreatedSuccess(response.data));
   } catch (error) {
@@ -54,7 +60,14 @@ export const createPost = (data) => async (dispatch, getState) => {
 
 export const updatePost = (id, data) => async (dispatch, getState) => {
   try {
-    const response = await axios.patch(`${API_URL}/posts/${id}`, { data });
+    const token = getState().user.authData.token;
+    const response = await API.patch(
+      `/posts/${id}`,
+      { data },
+      {
+        headers: { authorization: `Bearer ${token}` },
+      }
+    );
 
     dispatch(updatePostSuccess(response.data));
   } catch (error) {
@@ -64,7 +77,10 @@ export const updatePost = (id, data) => async (dispatch, getState) => {
 
 export const deletePost = (id) => async (dispatch, getState) => {
   try {
-    const response = await axios.delete(`${API_URL}/posts/${id}`);
+    const token = getState().user.authData.token;
+    const response = await API.delete(`/posts/${id}`, {
+      headers: { authorization: `Bearer ${token}` },
+    });
 
     dispatch(deletedPostSuccess(id));
   } catch (error) {
@@ -74,7 +90,12 @@ export const deletePost = (id) => async (dispatch, getState) => {
 
 export const likePost = (id) => async (dispatch, getState) => {
   try {
-    const response = await axios.patch(`${API_URL}/posts/${id}/like-post`);
+    const token = getState().user.authData.token;
+    const response = await API.patch(
+      `/posts/${id}/like-post`,
+      {},
+      { headers: { authorization: `Bearer ${token}` } }
+    );
 
     dispatch(updatePostSuccess(response.data));
   } catch (error) {

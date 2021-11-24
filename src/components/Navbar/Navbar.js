@@ -15,6 +15,7 @@ export default function Navbar() {
   const user = useSelector(selectUserAuthData());
 
   const logoutHandler = () => {
+    console.log("Called logout");
     dispatch(logout());
     history.push("/");
   };
